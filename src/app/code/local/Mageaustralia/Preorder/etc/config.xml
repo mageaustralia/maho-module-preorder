@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Mageaustralia_Preorder>
+            <version>0.1.0</version>
+        </Mageaustralia_Preorder>
+    </modules>
+    <global>
+        <helpers>
+            <mageaustralia_preorder>
+                <class>Mageaustralia_Preorder_Helper</class>
+            </mageaustralia_preorder>
+        </helpers>
+        <blocks>
+            <mageaustralia_preorder>
+                <class>Mageaustralia_Preorder_Block</class>
+            </mageaustralia_preorder>
+        </blocks>
+        <models>
+            <mageaustralia_preorder>
+                <class>Mageaustralia_Preorder_Model</class>
+            </mageaustralia_preorder>
+        </models>
+        <resources>
+            <mageaustralia_preorder_setup>
+                <setup>
+                    <module>Mageaustralia_Preorder</module>
+                    <class>Mage_Eav_Model_Entity_Setup</class>
+                </setup>
+            </mageaustralia_preorder_setup>
+        </resources>
+    </global>
+    <default>
+        <mageaustralia_preorder>
+            <general>
+                <enabled>1</enabled>
+                <default_button_text>Pre-order now</default_button_text>
+                <landing_page_enabled>1</landing_page_enabled>
+                <send_reminder_7d>1</send_reminder_7d>
+                <send_reminder_1d>1</send_reminder_1d>
+                <ics_attach>1</ics_attach>
+            </general>
+        </mageaustralia_preorder>
+    </default>
+</config>
