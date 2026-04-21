@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Mageaustralia_Preorder>
+            <active>true</active>
+            <codePool>local</codePool>
+            <depends>
+                <Mage_Catalog/>
+                <Mage_Sales/>
+                <Mage_Checkout/>
+            </depends>
+        </Mageaustralia_Preorder>
+    </modules>
+</config>
