@@ -1,0 +1,42 @@
+{
+    "name": "mageaustralia/maho-module-preorder",
+    "description": "Pre-order workflow for Maho — auto SEO landing page, .ics calendar export, lifecycle emails, headless-ready.",
+    "type": "maho-module",
+    "license": "Apache-2.0",
+    "homepage": "https://github.com/mageaustralia/maho-module-preorder",
+    "authors": [
+        {
+            "name": "Mage Australia",
+            "email": "dev@mageaustralia.com.au",
+            "homepage": "https://mageaustralia.com.au"
+        }
+    ],
+    "require": {
+        "php": ">=8.3",
+        "mahocommerce/maho": ">=26.3"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.11",
+        "phpunit/phpunit": "^10.5"
+    },
+    "autoload": {
+        "psr-0": {
+            "Mageaustralia_Preorder_": "src/app/code/local/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Mageaustralia\\Preorder\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "map": [
+            ["src/app/code/local/Mageaustralia/Preorder", "app/code/local/Mageaustralia/Preorder"],
+            ["src/app/design/frontend/base/default", "app/design/frontend/base/default"],
+            ["src/app/design/adminhtml/default/default", "app/design/adminhtml/default/default"],
+            ["src/app/etc/modules/Mageaustralia_Preorder.xml", "app/etc/modules/Mageaustralia_Preorder.xml"],
+            ["src/app/locale/en_US/Mageaustralia_Preorder.csv", "app/locale/en_US/Mageaustralia_Preorder.csv"],
+            ["src/app/locale/en_US/template/email/preorder", "app/locale/en_US/template/email/preorder"]
+        ]
+    }
+}
