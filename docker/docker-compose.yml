@@ -6,8 +6,8 @@ services:
     environment:
       SERVER_NAME: "http://localhost:8080"
     volumes:
-      - /Volumes/second_disk/Development/maho-modules/maho-module-preorder/src:/mnt/preorder-src:ro
-      - /Volumes/second_disk/Development/maho-modules/maho-module-preorder/docker/entrypoint-overlay.sh:/usr/local/bin/entrypoint-overlay.sh:ro
+      - ../src:/mnt/preorder-src:ro
+      - ./entrypoint-overlay.sh:/usr/local/bin/entrypoint-overlay.sh:ro
       - maho_app:/app/app
       - maho_var:/app/var
     depends_on:
