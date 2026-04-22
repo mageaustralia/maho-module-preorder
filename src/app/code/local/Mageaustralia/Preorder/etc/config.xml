@@ -29,6 +29,26 @@
                 </setup>
             </mageaustralia_preorder_setup>
         </resources>
+        <events>
+            <checkout_cart_product_add_after>
+                <observers>
+                    <mageaustralia_preorder_cart_add>
+                        <type>singleton</type>
+                        <class>mageaustralia_preorder/observer</class>
+                        <method>onCartItemAdd</method>
+                    </mageaustralia_preorder_cart_add>
+                </observers>
+            </checkout_cart_product_add_after>
+            <sales_convert_quote_item_to_order_item>
+                <observers>
+                    <mageaustralia_preorder_to_order>
+                        <type>singleton</type>
+                        <class>mageaustralia_preorder/observer</class>
+                        <method>onQuoteItemToOrderItem</method>
+                    </mageaustralia_preorder_to_order>
+                </observers>
+            </sales_convert_quote_item_to_order_item>
+        </events>
     </global>
     <frontend>
         <layout>
