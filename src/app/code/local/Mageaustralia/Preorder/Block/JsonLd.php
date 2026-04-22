@@ -10,6 +10,7 @@ class Mageaustralia_Preorder_Block_JsonLd extends Mage_Core_Block_Template
         if (!$list) {
             return [];
         }
+        /** @var Mageaustralia_Preorder_Block_Landing_ProductList $list */
         $collection = $list->getLoadedProductCollection();
         $items = [];
         foreach ($collection as $product) {

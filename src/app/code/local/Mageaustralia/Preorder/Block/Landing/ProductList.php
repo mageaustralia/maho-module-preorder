@@ -19,7 +19,9 @@ class Mageaustralia_Preorder_Block_Landing_ProductList extends Mage_Catalog_Bloc
             // Sort: nulls last, then by date asc — use portable expression not MySQL ISNULL()
             $collection->getSelect()->order(['(at_preorder_available_date.value IS NULL) ASC', 'at_preorder_available_date.value ASC']);
 
-            Mage::getSingleton('catalog/product_visibility')->addVisibleInCatalogFilterToCollection($collection);
+            /** @var Mage_Catalog_Model_Product_Visibility $visibility */
+            $visibility = Mage::getSingleton('catalog/product_visibility');
+            $visibility->addVisibleInCatalogFilterToCollection($collection);
 
             $this->_productCollection = $collection;
         }
