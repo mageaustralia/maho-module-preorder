@@ -1,21 +1,63 @@
-<!--@subject Your Pre-order Confirmation @-->
+<!--@subject Your pre-order is confirmed - ships {{var earliest_dispatch_formatted}} @-->
 <!--@vars
 {
-  "store url=\"\"":"Store Url",
-  "var customer.firstname":"Customer First Name",
+  "var customer.firstname":"Customer first name",
   "var order.increment_id":"Order ID",
-  "var earliest_dispatch_formatted":"Earliest dispatch date"
+  "var earliest_dispatch_formatted":"Earliest dispatch (formatted)",
+  "var preorder_items_count":"Number of preorder line items",
+  "var store_name":"Store name",
+  "var store_url":"Store base URL",
+  "var preorder_landing_url":"/preorder landing URL"
 }
 @-->
 {{template config_path="design/email/header"}}
 
-<table cellspacing="0" cellpadding="0" border="0" width="100%">
-<tr><td>
-<h1>Hi {{var customer.firstname}},</h1>
-<p>Thanks for your pre-order ({{var order.increment_id}}).</p>
-<p>Your earliest expected dispatch date is <strong>{{var earliest_dispatch_formatted}}</strong>.</p>
-<p>We'll notify you 7 days before, 1 day before, and the day your pre-order ships.</p>
-<p>A calendar event (.ics) is attached so you can add the dispatch date to your calendar.</p>
+<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f6f6f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#1a1a2e;">
+<tr><td align="center">
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width:600px;background:#ffffff;margin:24px auto;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+
+    <!-- Hero band -->
+    <tr><td style="background:#1a1a2e;color:#ffffff;padding:28px 32px;">
+      <div style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;opacity:0.7;margin-bottom:6px;">Pre-order confirmed</div>
+      <div style="font-size:26px;font-weight:600;line-height:1.2;">Thanks, {{var customer.firstname}}.</div>
+      <div style="font-size:14px;opacity:0.85;margin-top:10px;">Order <strong>#{{var order.increment_id}}</strong> is locked in. We'll ship the moment stock arrives.</div>
+    </td></tr>
+
+    <!-- Dispatch callout -->
+    <tr><td style="padding:20px 32px 0;">
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#fef2f2;border-radius:6px;">
+        <tr>
+          <td style="padding:14px 16px;font-size:13px;color:#991b1b;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;">Earliest dispatch</td>
+          <td align="right" style="padding:14px 16px;font-size:18px;color:#991b1b;font-weight:700;">{{var earliest_dispatch_formatted}}</td>
+        </tr>
+      </table>
+    </td></tr>
+
+    <!-- Items list (rendered server-side, see Observer::onOrderPlaceAfter) -->
+    <tr><td style="padding:24px 32px 8px;">
+      <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:10px;">Pre-order items ({{var preorder_items_count}})</div>
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-top:1px solid #ececec;">
+        {{var preorder_items_html}}
+      </table>
+    </td></tr>
+
+    <!-- What happens next -->
+    <tr><td style="padding:20px 32px;">
+      <div style="font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#6b6b6b;margin-bottom:12px;">What happens next</div>
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="font-size:14px;color:#3a3a4a;line-height:1.5;">
+        <tr><td style="padding:6px 0;">&#8226;&nbsp; You'll get a heads-up <strong>7 days</strong> before dispatch.</td></tr>
+        <tr><td style="padding:6px 0;">&#8226;&nbsp; A final reminder the <strong>day before</strong> so you can plan to be home.</td></tr>
+        <tr><td style="padding:6px 0;">&#8226;&nbsp; Tracking lands in your inbox the moment your order ships.</td></tr>
+      </table>
+    </td></tr>
+
+    <!-- CTA + calendar -->
+    <tr><td align="center" style="padding:8px 32px 28px;">
+      <a href="{{var preorder_landing_url}}" style="display:inline-block;background:#1a1a2e;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;padding:12px 24px;border-radius:6px;">Browse all pre-orders</a>
+      <div style="font-size:12px;color:#6b6b6b;margin-top:14px;">A calendar event (.ics) is attached &mdash; add the dispatch date to your calendar in one click.</div>
+    </td></tr>
+
+  </table>
 </td></tr>
 </table>
 

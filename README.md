@@ -48,13 +48,11 @@ The full smoke walkthrough captured against a fresh sample-data install:
 
 | Step | Screenshot |
 |---|---|
-| Admin login | ![Admin login](./docs/screenshots/00-admin-login.png) |
 | System config (Catalog > Preorder) | ![Admin config](./docs/screenshots/01-admin-config.png) |
 | Product edit — Preorder tab | ![Product edit](./docs/screenshots/03-admin-product-preorder-tab.png) |
 | PDP — badge + custom CTA + message | ![PDP](./docs/screenshots/04-pdp-preorder.png) |
 | Category list — badge on product card | ![Category badge](./docs/screenshots/05-category-badge.png) |
 | Shopping cart — preorder line label | ![Cart](./docs/screenshots/06-cart-label.png) |
-| Order success | ![Order success](./docs/screenshots/07-order-success.png) |
 | `/preorder` SEO landing page | ![Landing page](./docs/screenshots/08-preorder-landing.png) |
 | Mailhog inbox | ![Mailhog inbox](./docs/screenshots/09-mailhog-inbox.png) |
 | Confirmation email | ![Preorder email](./docs/screenshots/10-mailhog-preorder-email.png) |

@@ -62,14 +62,50 @@ class Mageaustralia_Preorder_Model_Observer
             return;
         }
 
-        // Cart line label
+        // Cart line label — inject INSIDE the product-cart-info <td> so it sits
+        // with the product/SKU/options, not appended after the row.
+        // Inline the HTML (no createBlock) to avoid registering an orphan block in
+        // the layout that other parents may render unexpectedly.
         if ($block instanceof Mage_Checkout_Block_Cart_Item_Renderer) {
             $item = $block->getItem();
-            if ($item->getIsPreorder()) {
-                $labelBlock = Mage::app()->getLayout()
-                    ->createBlock('mageaustralia_preorder/cart_item')
-                    ->setData('item', $item);
-                $transport->setHtml($transport->getHtml() . $labelBlock->toHtml());
+            if (!$item || !$item->getIsPreorder()) {
+                return;
+            }
+            $rawDate = $item->getPreorderAvailableDate();
+            $dateText = $rawDate ? date('M j, Y', strtotime((string) $rawDate)) : '';
+            $labelHtml = $dateText !== ''
+                ? sprintf(
+                    '<span class="mageaustralia-preorder-cart-label">%s &middot; ships ~%s</span>',
+                    Mage::helper('mageaustralia_preorder')->__('Pre-order'),
+                    htmlspecialchars($dateText, ENT_QUOTES),
+                )
+                : sprintf(
+                    '<span class="mageaustralia-preorder-cart-label">%s</span>',
+                    Mage::helper('mageaustralia_preorder')->__('Pre-order'),
+                );
+
+            $html = $transport->getHtml();
+            // Try product-cart-info td (default Maho cart theme).
+            $injected = preg_replace(
+                '/(<td[^>]*class="[^"]*product-cart-info[^"]*"[^>]*>[\s\S]*?)(<\/td>)/',
+                '$1' . $labelHtml . '$2',
+                $html,
+                1,
+            );
+            // Mini-cart fallback: insert before </a> of the product link inside <li>.
+            if ($injected === null || $injected === $html) {
+                $injected = preg_replace(
+                    '/(<li[^>]*class="[^"]*item[^"]*"[^>]*>[\s\S]*?<a[^>]*>[\s\S]*?<\/a>)/',
+                    '$1' . $labelHtml,
+                    $html,
+                    1,
+                );
+            }
+            if ($injected !== null && $injected !== $html) {
+                $transport->setHtml($injected);
+            } else {
+                // Theme doesn't match either pattern — append (legacy behaviour).
+                $transport->setHtml($html . $labelHtml);
             }
             return;
         }
@@ -219,17 +255,54 @@ class Mageaustralia_Preorder_Model_Observer
         // and all items have getPreorderAvailableDate() (filtered above).
         assert($earliest !== null);
 
-        // Build email body from template (if configured), fall back to plain text
+        // Build email body from template (if configured), fall back to plain text.
+        // NOTE: loadDefault() reads from config.xml-registered template files and
+        // does NOT set an entity_id, so checking getId() always returns 0.
+        // Use getTemplateText() to detect a successfully-loaded default template.
         $body = null;
+        $subject = null;
         /** @var Mage_Core_Model_Email_Template $tpl */
         $tpl = Mage::getModel('core/email_template');
         $tpl->loadDefault(Mageaustralia_Preorder_Model_Email_Sender::TEMPLATE_CONFIRMATION);
-        if ($tpl->getId()) {
-            $body = $tpl->getProcessedTemplate([
+        if ($tpl->getTemplateText()) {
+            // Maho's email-template filter doesn't support {{foreach}} — pre-render
+            // the items rows in PHP and pass as a single HTML var.
+            $itemsHtml = '';
+            foreach ($preorderItems as $i) {
+                $d = $i->getPreorderAvailableDate();
+                $dateText = $d ? date('M j, Y', strtotime((string) $d)) : '';
+                $itemsHtml .= sprintf(
+                    '<tr><td style="padding:12px 0;border-bottom:1px solid #ececec;">'
+                    . '<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%%">'
+                    . '<tr>'
+                    . '<td style="font-size:14px;font-weight:600;color:#1a1a2e;">%s</td>'
+                    . '<td align="right" style="font-size:13px;color:#1a1a2e;white-space:nowrap;">%s &times; %d</td>'
+                    . '</tr>'
+                    . '<tr><td colspan="2" style="font-size:12px;color:#6b6b6b;padding-top:4px;">SKU: %s &nbsp;&middot;&nbsp; Ships ~%s</td></tr>'
+                    . '</table></td></tr>',
+                    htmlspecialchars((string) $i->getName(), ENT_QUOTES),
+                    htmlspecialchars(Mage::helper('core')->currency($i->getPrice(), true, false), ENT_QUOTES),
+                    (int) $i->getQtyOrdered(),
+                    htmlspecialchars((string) $i->getSku(), ENT_QUOTES),
+                    htmlspecialchars($dateText, ENT_QUOTES),
+                );
+            }
+            // Maho's template filter doesn't traverse nested arrays; pass scalars
+            // and Varien_Object for any structured access.
+            $vars = [
                 'order'                       => $order,
-                'customer'                    => ['firstname' => $order->getCustomerFirstname()],
+                'customer'                    => new Varien_Object(['firstname' => $order->getCustomerFirstname() ?: 'there']),
+                'preorder_items_html'         => $itemsHtml,
+                'preorder_items_count'        => count($preorderItems),
                 'earliest_dispatch_formatted' => $earliest->format('M j, Y'),
-            ]);
+                'store_name'                  => Mage::getStoreConfig('general/store_information/name', $order->getStoreId()) ?: Mage::app()->getStore($order->getStoreId())->getName(),
+                'store_url'                   => Mage::app()->getStore($order->getStoreId())->getBaseUrl(),
+                'preorder_landing_url'        => Mage::app()->getStore($order->getStoreId())->getBaseUrl() . 'preorder',
+            ];
+            $tpl->setSenderName(Mage::getStoreConfig('trans_email/ident_general/name', $order->getStoreId()));
+            $tpl->setSenderEmail(Mage::getStoreConfig('trans_email/ident_general/email', $order->getStoreId()));
+            $body = $tpl->getProcessedTemplate($vars);
+            $subject = $tpl->getProcessedTemplateSubject($vars);
         }
 
         // Get Symfony Mailer transport via Maho core helper
@@ -245,7 +318,7 @@ class Mageaustralia_Preorder_Model_Observer
         $symfonyEmail = (new SymfonyEmail())
             ->from(new Address($fromEmail, $fromName))
             ->to(new Address((string) $order->getCustomerEmail(), (string) $order->getCustomerName()))
-            ->subject('Your pre-order — calendar event attached');
+            ->subject($subject ?: 'Your pre-order is confirmed');
 
         if ($body !== null) {
             $symfonyEmail->html($body);

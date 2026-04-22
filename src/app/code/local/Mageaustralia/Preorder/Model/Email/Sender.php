@@ -31,14 +31,24 @@ class Mageaustralia_Preorder_Model_Email_Sender
         $email->setSenderEmail(Mage::getStoreConfig('trans_email/ident_general/email', $order->getStoreId()));
         $email->setTemplateSubject($email->getTemplateSubject());
 
+        $store = Mage::app()->getStore($order->getStoreId());
+
         return (bool) $email->send(
             $order->getCustomerEmail(),
             $order->getCustomerName(),
             [
                 'order'                   => $order,
-                'product'                 => ['name' => $item->getName()],
-                'customer'                => ['firstname' => $order->getCustomerFirstname()],
+                'product'                 => new Varien_Object([
+                    'name'            => $item->getName(),
+                    'sku'             => $item->getSku(),
+                    'qty'             => (int) $item->getQtyOrdered(),
+                    'price_formatted' => Mage::helper('core')->currency($item->getPrice(), true, false),
+                ]),
+                'customer'                => new Varien_Object(['firstname' => $order->getCustomerFirstname() ?: 'there']),
                 'dispatch_date_formatted' => $formatted,
+                'store_name'              => Mage::getStoreConfig('general/store_information/name', $order->getStoreId()) ?: $store->getName(),
+                'store_url'               => $store->getBaseUrl(),
+                'preorder_landing_url'    => $store->getBaseUrl() . 'preorder',
             ],
         );
     }

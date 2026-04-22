@@ -67,6 +67,25 @@
                 </observers>
             </sales_order_place_after>
         </events>
+        <template>
+            <email>
+                <mageaustralia_preorder_confirmation>
+                    <label>Pre-order confirmation</label>
+                    <file>preorder/confirmation.html</file>
+                    <type>html</type>
+                </mageaustralia_preorder_confirmation>
+                <mageaustralia_preorder_reminder_7d>
+                    <label>Pre-order reminder (7 days before)</label>
+                    <file>preorder/reminder_7d.html</file>
+                    <type>html</type>
+                </mageaustralia_preorder_reminder_7d>
+                <mageaustralia_preorder_reminder_1d>
+                    <label>Pre-order reminder (1 day before)</label>
+                    <file>preorder/reminder_1d.html</file>
+                    <type>html</type>
+                </mageaustralia_preorder_reminder_1d>
+            </email>
+        </template>
     </global>
     <frontend>
         <routers>
