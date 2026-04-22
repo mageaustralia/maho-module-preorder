@@ -6,6 +6,7 @@ parameters:
         - src/app/code/local/Mageaustralia/Preorder/sql
     bootstrapFiles:
         - tests/bootstrap.php
+    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         - '#Class Mage(_[A-Za-z0-9]+)+ not found#'
         - '#Class Varien_[A-Za-z0-9_]+ not found#'
