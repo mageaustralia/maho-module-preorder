@@ -8,6 +8,7 @@
 /docker/.data/
 /composer.phar
 /maho/
+/maho
 /public/
 *.swp
 .DS_Store
