@@ -2,6 +2,11 @@
 
 Pre-order workflow for Maho. Lets merchants accept orders for products before they're in stock, with a known availability date, the right labels everywhere, and an SEO landing page no other module ships.
 
+**Status:**
+- **Phase 1 (this release):** PDP preorder badge + button, cart line label, order item flag, admin config + product attributes.
+- **Phase 2** (`/preorder` SEO landing page with `schema.org` structured data) — coming.
+- **Phase 3** (`.ics` calendar attachment + lifecycle reminder emails) — coming.
+
 **Requires:** [Maho](https://github.com/mahocommerce/maho) (PHP 8.3+, Maho ≥26.3)
 
 [![Maho Storefront ready](https://img.shields.io/badge/Maho_Storefront-ready-blue)](https://github.com/mageaustralia/maho-storefront)
