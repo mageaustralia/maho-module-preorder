@@ -57,6 +57,15 @@
                     </mageaustralia_preorder_cart_label>
                 </observers>
             </core_block_abstract_to_html_after>
+            <sales_order_place_after>
+                <observers>
+                    <mageaustralia_preorder_send_ics>
+                        <type>singleton</type>
+                        <class>mageaustralia_preorder/observer</class>
+                        <method>onOrderPlaceAfter</method>
+                    </mageaustralia_preorder_send_ics>
+                </observers>
+            </sales_order_place_after>
         </events>
     </global>
     <frontend>
