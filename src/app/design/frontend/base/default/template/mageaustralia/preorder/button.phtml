@@ -1,0 +1,14 @@
+<?php /** @var Mageaustralia_Preorder_Block_Button $this */ ?>
+<?php if ($this->isPreorder() && ($product = $this->getProduct()) && $product->isSaleable()): ?>
+    <div class="mageaustralia-preorder-cta">
+        <button type="button"
+                title="<?php echo $this->escapeHtml($this->getButtonText()); ?>"
+                class="button btn-cart mageaustralia-preorder-cta__btn"
+                onclick="productAddToCartForm.submit(this)">
+            <span><span><?php echo $this->escapeHtml($this->getButtonText()); ?></span></span>
+        </button>
+        <?php if ($msg = $this->getMessage()): ?>
+            <p class="mageaustralia-preorder-cta__message"><?php echo $this->escapeHtml($msg); ?></p>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>
