@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Mageaustralia_Preorder>
-            <version>0.1.0</version>
+            <version>0.1.2</version>
         </Mageaustralia_Preorder>
     </modules>
     <global>
