@@ -1,0 +1,38 @@
+<?php /** @var Mageaustralia_Preorder_Block_Landing_ProductList $this */ ?>
+<div class="page-title category-title">
+    <h1><?php echo $this->__('Pre-order Now'); ?></h1>
+</div>
+
+<?php $_productCollection = $this->getLoadedProductCollection(); ?>
+
+<?php if ($_productCollection->getSize()): ?>
+    <p class="preorder-landing-intro">
+        <?php echo $this->__('All products available for pre-order. Reserve yours today.'); ?>
+    </p>
+
+    <div class="category-products">
+        <ul class="products-grid">
+            <?php foreach ($_productCollection as $_product): ?>
+                <li class="item">
+                    <a href="<?php echo $this->escapeHtml($_product->getProductUrl()); ?>"
+                       class="product-image"
+                       title="<?php echo $this->escapeHtml($_product->getName()); ?>">
+                        <img src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize(135); ?>"
+                             alt="<?php echo $this->escapeHtml($_product->getName()); ?>">
+                    </a>
+                    <h2 class="product-name">
+                        <a href="<?php echo $this->escapeHtml($_product->getProductUrl()); ?>"><?php echo $this->escapeHtml($_product->getName()); ?></a>
+                    </h2>
+                    <?php $badge = $this->getLayout()->createBlock('mageaustralia_preorder/badge')->setData('product', $_product); ?>
+                    <?php echo $badge->toHtml(); ?>
+                    <?php echo $this->getPriceHtml($_product, true); ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+
+    <?php echo $this->getChildHtml('mageaustralia.preorder.jsonld'); ?>
+
+<?php else: ?>
+    <p class="note-msg"><?php echo $this->__('No pre-order products at the moment. Check back soon.'); ?></p>
+<?php endif; ?>
