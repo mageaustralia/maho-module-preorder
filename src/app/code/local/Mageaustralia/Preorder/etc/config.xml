@@ -97,6 +97,18 @@
             </modules>
         </translate>
     </adminhtml>
+    <crontab>
+        <jobs>
+            <mageaustralia_preorder_reminders>
+                <schedule>
+                    <cron_expr>0 6 * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>mageaustralia_preorder/cron_reminders::run</model>
+                </run>
+            </mageaustralia_preorder_reminders>
+        </jobs>
+    </crontab>
     <default>
         <mageaustralia_preorder>
             <general>
