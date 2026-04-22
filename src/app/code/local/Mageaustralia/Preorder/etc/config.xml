@@ -60,6 +60,15 @@
         </events>
     </global>
     <frontend>
+        <routers>
+            <mageaustralia_preorder>
+                <use>standard</use>
+                <args>
+                    <module>Mageaustralia_Preorder</module>
+                    <frontName>preorder</frontName>
+                </args>
+            </mageaustralia_preorder>
+        </routers>
         <layout>
             <updates>
                 <mageaustralia_preorder>
