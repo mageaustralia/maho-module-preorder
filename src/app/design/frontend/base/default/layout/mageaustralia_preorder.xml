@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <!-- PDP: insert preorder badge above title, replace add-to-cart with preorder button when applicable -->
+    <catalog_product_view>
+        <reference name="product.info">
+            <block type="mageaustralia_preorder/badge" name="mageaustralia.preorder.badge.pdp" before="-" />
+        </reference>
+        <reference name="product.info.addtocart">
+            <block type="mageaustralia_preorder/button" name="mageaustralia.preorder.button" template="mageaustralia/preorder/button.phtml" />
+        </reference>
+    </catalog_product_view>
+
+    <!-- Category list: badge on each product card -->
+    <catalog_category_default>
+        <reference name="product_list">
+            <action method="setChild">
+                <name>preorder.badge</name>
+                <block>mageaustralia.preorder.badge.list</block>
+            </action>
+        </reference>
+    </catalog_category_default>
+</layout>

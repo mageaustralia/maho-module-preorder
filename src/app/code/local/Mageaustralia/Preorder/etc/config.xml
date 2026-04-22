@@ -30,6 +30,35 @@
             </mageaustralia_preorder_setup>
         </resources>
     </global>
+    <frontend>
+        <layout>
+            <updates>
+                <mageaustralia_preorder>
+                    <file>mageaustralia_preorder.xml</file>
+                </mageaustralia_preorder>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <Mageaustralia_Preorder>
+                    <files>
+                        <default>Mageaustralia_Preorder.csv</default>
+                    </files>
+                </Mageaustralia_Preorder>
+            </modules>
+        </translate>
+    </frontend>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Mageaustralia_Preorder>
+                    <files>
+                        <default>Mageaustralia_Preorder.csv</default>
+                    </files>
+                </Mageaustralia_Preorder>
+            </modules>
+        </translate>
+    </adminhtml>
     <default>
         <mageaustralia_preorder>
             <general>
