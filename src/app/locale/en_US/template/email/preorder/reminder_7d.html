@@ -1,0 +1,8 @@
+<!--@subject Your pre-order ships in 7 days @-->
+{{template config_path="design/email/header"}}
+
+<h1>Hi {{var customer.firstname}},</h1>
+<p>Your pre-ordered <strong>{{var product.name}}</strong> is shipping in about 7 days ({{var dispatch_date_formatted}}).</p>
+<p>Order: {{var order.increment_id}}</p>
+
+{{template config_path="design/email/footer"}}

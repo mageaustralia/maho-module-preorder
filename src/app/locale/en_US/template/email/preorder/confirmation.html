@@ -1,0 +1,22 @@
+<!--@subject Your Pre-order Confirmation @-->
+<!--@vars
+{
+  "store url=\"\"":"Store Url",
+  "var customer.firstname":"Customer First Name",
+  "var order.increment_id":"Order ID",
+  "var earliest_dispatch_formatted":"Earliest dispatch date"
+}
+@-->
+{{template config_path="design/email/header"}}
+
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+<tr><td>
+<h1>Hi {{var customer.firstname}},</h1>
+<p>Thanks for your pre-order ({{var order.increment_id}}).</p>
+<p>Your earliest expected dispatch date is <strong>{{var earliest_dispatch_formatted}}</strong>.</p>
+<p>We'll notify you 7 days before, 1 day before, and the day your pre-order ships.</p>
+<p>A calendar event (.ics) is attached so you can add the dispatch date to your calendar.</p>
+</td></tr>
+</table>
+
+{{template config_path="design/email/footer"}}

@@ -1,0 +1,8 @@
+<!--@subject Your pre-order ships tomorrow @-->
+{{template config_path="design/email/header"}}
+
+<h1>Hi {{var customer.firstname}},</h1>
+<p>Heads up — your pre-ordered <strong>{{var product.name}}</strong> ships tomorrow ({{var dispatch_date_formatted}}).</p>
+<p>Order: {{var order.increment_id}}</p>
+
+{{template config_path="design/email/footer"}}
