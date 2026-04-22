@@ -11,3 +11,12 @@ parameters:
         - '#Class Mage(_[A-Za-z0-9]+)+ not found#'
         - '#Class Varien_[A-Za-z0-9_]+ not found#'
         - '#Call to static method [a-zA-Z]+\(\) on an unknown class Mage#'
+        # Mage::helper() returns Mage_Core_Helper_Abstract|false - dynamic helper cast is intentional
+        - '#Cannot call method [a-zA-Z]+\(\) on Mage_Core_Helper_Abstract\|false#'
+        # Maho/Magento models use __call() magic for dynamic getters/setters - these are not real errors
+        - '#Call to an undefined method Mage_(Sales|Catalog|Checkout)_Model_[A-Za-z_]+::(get|set)[A-Za-z]+\(\)#'
+        # Maho\Event uses __call() magic for dynamic event data accessors
+        - '#Call to an undefined method Maho\\Event::[a-zA-Z]+\(\)#'
+        # PHPDoc-driven ternary/negation warnings from Mage type stubs
+        - '#Ternary operator condition is always true#'
+        - '#Negated boolean expression is always false#'
