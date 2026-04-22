@@ -89,4 +89,26 @@ $installer->addAttribute('catalog_product', 'preorder_message', [
     'apply_to'                => 'simple,configurable,virtual,bundle,downloadable',
 ]);
 
+// Add quote/order item columns - portable across MySQL/SQLite/PG
+$connection = $installer->getConnection();
+
+foreach (['sales_flat_quote_item', 'sales_flat_order_item'] as $tableName) {
+    $table = $installer->getTable($tableName);
+    if (!$connection->tableColumnExists($table, 'is_preorder')) {
+        $connection->addColumn($table, 'is_preorder', [
+            'type'     => Varien_Db_Ddl_Table::TYPE_SMALLINT,
+            'nullable' => false,
+            'default'  => 0,
+            'comment'  => 'Pre-order flag (1 = preorder, 0 = normal)',
+        ]);
+    }
+    if (!$connection->tableColumnExists($table, 'preorder_available_date')) {
+        $connection->addColumn($table, 'preorder_available_date', [
+            'type'     => Varien_Db_Ddl_Table::TYPE_DATETIME,
+            'nullable' => true,
+            'comment'  => 'Pre-order expected dispatch date',
+        ]);
+    }
+}
+
 $installer->endSetup();
