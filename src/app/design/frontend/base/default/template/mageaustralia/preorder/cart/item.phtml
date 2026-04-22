@@ -1,0 +1,10 @@
+<?php /** @var Mageaustralia_Preorder_Block_Cart_Item $this */ ?>
+<?php if ($this->isPreorder()): ?>
+    <span class="mageaustralia-preorder-cart-label">
+        <?php if ($d = $this->getDateFormatted()): ?>
+            <?php echo $this->__('Pre-order - ships ~%s', $this->escapeHtml($d)); ?>
+        <?php else: ?>
+            <?php echo $this->__('Pre-order'); ?>
+        <?php endif; ?>
+    </span>
+<?php endif; ?>
