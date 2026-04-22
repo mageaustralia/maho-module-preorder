@@ -36,7 +36,8 @@
   ["src/app/design/adminhtml/default/default", "app/design/adminhtml/default/default"],
   ["src/app/etc/modules/Mageaustralia_Preorder.xml", "app/etc/modules/Mageaustralia_Preorder.xml"],
   ["src/app/locale/en_US/Mageaustralia_Preorder.csv", "app/locale/en_US/Mageaustralia_Preorder.csv"],
-  ["src/app/locale/en_US/template/email/preorder", "app/locale/en_US/template/email/preorder"]
+  ["src/app/locale/en_US/template/email/preorder", "app/locale/en_US/template/email/preorder"],
+  ["src/skin/frontend/base/default", "skin/frontend/base/default"]
   ]
   },
   "config": {

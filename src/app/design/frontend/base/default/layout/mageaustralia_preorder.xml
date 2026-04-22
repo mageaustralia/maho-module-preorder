@@ -19,4 +19,27 @@
             </action>
         </reference>
     </catalog_category_default>
+
+    <!-- TODO: Open Graph + Twitter card meta tags. Maho's head block lacks
+         setMetaProperty by default — needs either head block override or theme
+         hook. Deferred to v0.2.0. -->
+
+    <mageaustralia_preorder_index_index>
+        <reference name="root">
+            <action method="setTemplate"><template>page/1column.phtml</template></action>
+        </reference>
+        <reference name="head">
+            <action method="setTitle" translate="title" module="mageaustralia_preorder"><title>Pre-order Now</title></action>
+            <action method="setDescription" translate="description" module="mageaustralia_preorder"><description>All products available for pre-order. Reserve yours today.</description></action>
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/mageaustralia_preorder.css</name>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="mageaustralia_preorder/landing_productList" name="mageaustralia.preorder.product_list" template="mageaustralia/preorder/landing/list.phtml">
+                <block type="mageaustralia_preorder/jsonLd" name="mageaustralia.preorder.jsonld" as="mageaustralia.preorder.jsonld" template="mageaustralia/preorder/landing/jsonld.phtml"/>
+            </block>
+        </reference>
+    </mageaustralia_preorder_index_index>
 </layout>

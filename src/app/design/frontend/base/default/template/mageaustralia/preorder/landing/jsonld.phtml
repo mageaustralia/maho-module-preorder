@@ -1,0 +1,17 @@
+<?php /** @var Mageaustralia_Preorder_Block_JsonLd $this */ ?>
+<?php $items = $this->getProductsJsonLd(); ?>
+<?php if (!empty($items)): ?>
+<script type="application/ld+json">
+<?php echo json_encode([
+    '@context' => 'https://schema.org',
+    '@type'    => 'ItemList',
+    'itemListElement' => array_map(static function ($item, $position) {
+        return [
+            '@type'    => 'ListItem',
+            'position' => $position + 1,
+            'item'     => $item,
+        ];
+    }, $items, array_keys($items)),
+], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT); ?>
+</script>
+<?php endif; ?>
