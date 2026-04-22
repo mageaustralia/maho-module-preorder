@@ -1,26 +1,24 @@
 <?php /** @var Mageaustralia_Preorder_Block_Button $this */ ?>
 <?php if ($this->isPreorder() && ($product = $this->getProduct()) && $product->isSaleable()): ?>
-    <div class="mageaustralia-preorder-cta">
-        <button type="button"
-                title="<?php echo $this->escapeHtml($this->getButtonText()); ?>"
-                class="button btn-cart mageaustralia-preorder-cta__btn"
-                onclick="productAddToCartForm.submit(this)">
-            <span><span><?php echo $this->escapeHtml($this->getButtonText()); ?></span></span>
-        </button>
-        <?php if ($msg = $this->getMessage()): ?>
-            <p class="mageaustralia-preorder-cta__message"><?php echo $this->escapeHtml($msg); ?></p>
-        <?php endif; ?>
-    </div>
+    <?php if ($msg = $this->getMessage()): ?>
+        <p class="mageaustralia-preorder-cta__message"><?php echo $this->escapeHtml($msg); ?></p>
+    <?php endif; ?>
     <script type="text/javascript">
-        // Hide the standard "Add to Cart" button on PDP when this product is a
-        // preorder. Done client-side because product.info.addtocart renders
-        // its own .btn-cart before our block's HTML and there's no clean
-        // layout XML hook to remove it without a full template override.
+        // Repaint the existing .add-to-cart .btn-cart with our preorder label
+        // and styling, instead of rendering a sibling button. Keeps the
+        // qty + button + wishlist row layout intact (no flex/sizing drift).
         (function () {
-            var scope = document.querySelector('.product-shop, .product-essential') || document;
+            var label = <?php echo json_encode($this->getButtonText(), JSON_UNESCAPED_SLASHES); ?>;
+            var scope = document.querySelector('.add-to-cart, .product-shop, .product-essential') || document;
             scope.querySelectorAll('button.btn-cart').forEach(function (btn) {
-                if (btn.classList.contains('mageaustralia-preorder-cta__btn')) return;
-                btn.style.display = 'none';
+                btn.classList.add('mageaustralia-preorder-cta__btn');
+                btn.title = label;
+                var inner = btn.querySelector('span span') || btn.querySelector('span');
+                if (inner) {
+                    inner.textContent = label;
+                } else {
+                    btn.textContent = label;
+                }
             });
         })();
     </script>
