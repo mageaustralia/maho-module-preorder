@@ -48,8 +48,11 @@ class Mageaustralia_Preorder_Model_Observer
     }
 
     /**
-     * Inject preorder label into rendered cart item HTML.
-     * Hooked to core_block_abstract_to_html_after so we don't need a template override.
+     * Inject preorder label into rendered cart item HTML AND inject a badge
+     * onto each preorder product card in category / search list views.
+     *
+     * Hooked to core_block_abstract_to_html_after so the module works against
+     * the unmodified core list.phtml — no template override needed.
      */
     public function onBlockHtmlAfter(Varien_Event_Observer $observer): void
     {
@@ -58,17 +61,101 @@ class Mageaustralia_Preorder_Model_Observer
         if (!$block || !$transport) {
             return;
         }
-        if (!$block instanceof Mage_Checkout_Block_Cart_Item_Renderer) {
+
+        // Cart line label
+        if ($block instanceof Mage_Checkout_Block_Cart_Item_Renderer) {
+            $item = $block->getItem();
+            if ($item->getIsPreorder()) {
+                $labelBlock = Mage::app()->getLayout()
+                    ->createBlock('mageaustralia_preorder/cart_item')
+                    ->setData('item', $item);
+                $transport->setHtml($transport->getHtml() . $labelBlock->toHtml());
+            }
             return;
         }
-        $item = $block->getItem();
-        if (!$item || !$item->getIsPreorder()) {
-            return;
+
+        // Category / search product list — append a badge to each preorder card.
+        // Skip the landing-page block (Mageaustralia_Preorder_Block_Landing_ProductList)
+        // because list.phtml already renders the badge inline per item.
+        if ($block instanceof Mage_Catalog_Block_Product_List
+            && !($block instanceof Mageaustralia_Preorder_Block_Landing_ProductList)
+        ) {
+            $collection = $block->getLoadedProductCollection();
+            if (!$collection) {
+                return;
+            }
+            $html = $transport->getHtml();
+            $changed = false;
+            // Look up preorder flags in one query (avoid N+1) — list collections
+            // don't always eager-load custom attributes added post-install.
+            $productIds = [];
+            foreach ($collection as $product) {
+                $productIds[] = (int) $product->getId();
+            }
+            if (empty($productIds)) {
+                return;
+            }
+            /** @var Mage_Catalog_Model_Resource_Product_Collection $flagColl */
+            $flagColl = Mage::getResourceModel('catalog/product_collection');
+            $flagColl
+                ->addAttributeToSelect(['is_preorder', 'preorder_available_date', 'preorder_button_text', 'preorder_message'])
+                ->addFieldToFilter('entity_id', ['in' => $productIds])
+                ->setStoreId(Mage::app()->getStore()->getId());
+            $byId = [];
+            foreach ($flagColl as $p) {
+                $byId[(int) $p->getId()] = $p;
+            }
+
+            foreach ($collection as $product) {
+                $id = (int) $product->getId();
+                $hydrated = $byId[$id] ?? null;
+                if (!$hydrated || !Mage::helper('mageaustralia_preorder')->isPreorder($hydrated)) {
+                    continue;
+                }
+                $product = $hydrated;
+                $badge = Mage::app()->getLayout()
+                    ->createBlock('mageaustralia_preorder/badge')
+                    ->setData('product', $product)
+                    ->toHtml();
+                if ($badge === '') {
+                    continue;
+                }
+                // Attach the badge after the product name link for this product.
+                // Match the catalog/product/list.phtml link pattern (catalog/product/view URL).
+                $needle = sprintf('product_id=%d', (int) $product->getId());
+                if (str_contains($html, $needle)) {
+                    // Maho list.phtml emits a <button …>Add to Cart</button> per item.
+                    // Replace the FIRST add-to-cart for this product with the badge.
+                    // Robust enough for default + sample-data themes.
+                    $pattern = sprintf(
+                        '/(<button[^>]*onclick="[^"]*product\\/%d[^"]*"[^>]*>.*?<\\/button>)/s',
+                        (int) $product->getId(),
+                    );
+                    if (preg_match($pattern, $html)) {
+                        $html = preg_replace($pattern, $badge . '$1', $html, 1) ?? $html;
+                        $changed = true;
+                        continue;
+                    }
+                }
+                // Fallback: append to product name anchor for this product URL.
+                $url = $product->getProductUrl();
+                if ($url) {
+                    $escUrl = htmlspecialchars($url, ENT_QUOTES);
+                    $idx = strpos($html, $escUrl);
+                    if ($idx !== false) {
+                        // Insert badge right after the closing </a> following the URL match.
+                        $closeIdx = strpos($html, '</a>', $idx);
+                        if ($closeIdx !== false) {
+                            $html = substr($html, 0, $closeIdx + 4) . $badge . substr($html, $closeIdx + 4);
+                            $changed = true;
+                        }
+                    }
+                }
+            }
+            if ($changed) {
+                $transport->setHtml($html);
+            }
         }
-        $labelBlock = Mage::app()->getLayout()
-            ->createBlock('mageaustralia_preorder/cart_item')
-            ->setData('item', $item);
-        $transport->setHtml($transport->getHtml() . $labelBlock->toHtml());
     }
 
     /**
