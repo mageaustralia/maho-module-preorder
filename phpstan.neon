@@ -1,0 +1,12 @@
+parameters:
+    level: 5
+    paths:
+        - src/app/code/local/Mageaustralia/Preorder
+    excludePaths:
+        - src/app/code/local/Mageaustralia/Preorder/sql
+    bootstrapFiles:
+        - tests/bootstrap.php
+    ignoreErrors:
+        - '#Class Mage(_[A-Za-z0-9]+)+ not found#'
+        - '#Class Varien_[A-Za-z0-9_]+ not found#'
+        - '#Call to static method [a-zA-Z]+\(\) on an unknown class Mage#'

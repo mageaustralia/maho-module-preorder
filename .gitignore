@@ -6,5 +6,8 @@
 /.phpstan.cache/
 /composer.lock
 /docker/.data/
+/composer.phar
+/maho/
+/public/
 *.swp
 .DS_Store
