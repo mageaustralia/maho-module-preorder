@@ -1,0 +1,11 @@
+<?php /** @var Mageaustralia_Preorder_Block_Badge $this */ ?>
+<?php if ($this->isPreorder()): ?>
+    <span class="mageaustralia-preorder-badge">
+        <?php echo $this->__('Pre-order'); ?>
+        <?php if ($d = $this->getAvailableDateFormatted()): ?>
+            <span class="mageaustralia-preorder-badge__date">
+                <?php echo $this->__('Ships ~%s', $this->escapeHtml($d)); ?>
+            </span>
+        <?php endif; ?>
+    </span>
+<?php endif; ?>
