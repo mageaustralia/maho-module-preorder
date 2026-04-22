@@ -11,4 +11,17 @@
             <p class="mageaustralia-preorder-cta__message"><?php echo $this->escapeHtml($msg); ?></p>
         <?php endif; ?>
     </div>
+    <script type="text/javascript">
+        // Hide the standard "Add to Cart" button on PDP when this product is a
+        // preorder. Done client-side because product.info.addtocart renders
+        // its own .btn-cart before our block's HTML and there's no clean
+        // layout XML hook to remove it without a full template override.
+        (function () {
+            var scope = document.querySelector('.product-shop, .product-essential') || document;
+            scope.querySelectorAll('button.btn-cart').forEach(function (btn) {
+                if (btn.classList.contains('mageaustralia-preorder-cta__btn')) return;
+                btn.style.display = 'none';
+            });
+        })();
+    </script>
 <?php endif; ?>

@@ -1,8 +1,20 @@
 <?xml version="1.0"?>
 <layout version="0.1.0">
-    <!-- PDP: insert preorder badge above title, replace add-to-cart with preorder button when applicable -->
+    <!-- Load preorder skin CSS on every storefront page so badges and CTAs
+         render with their themed styling (PDP, category, cart, landing). -->
+    <default>
+        <reference name="head">
+            <action method="addItem">
+                <type>skin_css</type>
+                <name>css/mageaustralia_preorder.css</name>
+            </action>
+        </reference>
+    </default>
+
+    <!-- PDP: insert preorder badge into extrahint (core/text_list → auto-renders all children)
+         and add preorder CTA button alongside the standard add-to-cart (rendered via getChildHtml('',true,true)) -->
     <catalog_product_view>
-        <reference name="product.info">
+        <reference name="product.info.extrahint">
             <block type="mageaustralia_preorder/badge" name="mageaustralia.preorder.badge.pdp" before="-" />
         </reference>
         <reference name="product.info.addtocart">
@@ -10,15 +22,20 @@
         </reference>
     </catalog_product_view>
 
-    <!-- Category list: badge on each product card -->
+    <!-- Category list: declare badge block inside product_list so product-list templates
+         can call getChildHtml('preorder.badge') per-item (theme must call it explicitly).
+         The badge block is also instantiated here so it is available for reuse. -->
     <catalog_category_default>
         <reference name="product_list">
-            <action method="setChild">
-                <name>preorder.badge</name>
-                <block>mageaustralia.preorder.badge.list</block>
-            </action>
+            <block type="mageaustralia_preorder/badge" name="mageaustralia.preorder.badge.list" as="preorder.badge" />
         </reference>
     </catalog_category_default>
+
+    <catalog_category_layered>
+        <reference name="product_list">
+            <block type="mageaustralia_preorder/badge" name="mageaustralia.preorder.badge.list.layered" as="preorder.badge" />
+        </reference>
+    </catalog_category_layered>
 
     <!-- TODO: Open Graph + Twitter card meta tags. Maho's head block lacks
          setMetaProperty by default — needs either head block override or theme
