@@ -23,3 +23,6 @@ jobs:
       - run: composer install --prefer-dist --no-progress
       - run: vendor/bin/phpstan analyse --memory-limit=512M --no-progress
       - run: vendor/bin/phpunit
+
+  full:
+    uses: mageaustralia/maho-ci/.github/workflows/full-checks.yml@main
