@@ -2,7 +2,7 @@
   "name": "mageaustralia/maho-module-preorder",
   "description": "Pre-order workflow for Maho - auto SEO landing page, .ics calendar export, lifecycle emails, headless-ready.",
   "type": "maho-module",
-  "license": "Apache-2.0",
+  "license": "OSL-3.0",
   "homepage": "https://github.com/mageaustralia/maho-module-preorder",
   "authors": [
   {

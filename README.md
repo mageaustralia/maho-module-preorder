@@ -83,7 +83,7 @@ That's it. Frontend updates automatically.
 
 ## License
 
-Apache 2.0 — see [LICENSE](LICENSE).
+OSL-3.0 — see [LICENSE](LICENSE).
 
 ## Contributing
 
