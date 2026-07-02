@@ -14,7 +14,7 @@
 
 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background:#f6f6f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;color:#1a1a2e;">
 <tr><td align="center">
-  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width:600px;background:#ffffff;margin:24px auto;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="width:100%;max-width:600px;background:#ffffff;margin:24px auto;border-radius:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
 
     <!-- Hero band -->
     <tr><td style="background:#1a1a2e;color:#ffffff;padding:28px 32px;">
@@ -53,7 +53,11 @@
 
     <!-- CTA + calendar -->
     <tr><td align="center" style="padding:8px 32px 28px;">
-      <a href="{{var preorder_landing_url}}" style="display:inline-block;background:#1a1a2e;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;padding:12px 24px;border-radius:6px;">Browse all pre-orders</a>
+      <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center">
+        <tr><td align="center" bgcolor="#1a1a2e" style="border-radius:6px;">
+          <a href="{{var preorder_landing_url}}" target="_blank" style="display:inline-block;background:#1a1a2e;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;padding:12px 24px;border-radius:6px;">Browse all pre-orders</a>
+        </td></tr>
+      </table>
       <div style="font-size:12px;color:#6b6b6b;margin-top:14px;">A calendar event (.ics) is attached &mdash; add the dispatch date to your calendar in one click.</div>
     </td></tr>
 
